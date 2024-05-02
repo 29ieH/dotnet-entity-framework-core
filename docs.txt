@@ -1,0 +1,41 @@
+    - Cách sử dụng câu truy vấn LiNQ để select table 
+             QuanLyLopContext db = new QuanLyLopContext();
+            // - Select 
+            // Select all 
+            var selectAll = db.Svs.Select(p => p);
+            // Select with condition
+            //  + Cách viết 1
+            var selectByCondition1 = from p in db.Svs where p.IdLop == 1 select new { p.Mssv, p.NameSv, p.IdLopNavigation.NameLop };
+            //  + Cách viết 2
+            var selectByCondition2 = db.Svs.Where(p => p.IdLop == 1);
+            // + Sắp xếp viết default
+            var selectOrderByDefaut = from p in db.Svs orderby p.NameSv descending select new { p.Mssv, p.NameSv, p.IdLopNavigation.NameLop };
+            // + Sắp xếp sử dụng hàm
+            //  ~ Mặc định ASC
+            var selectAndOrder1 = db.Svs.OrderBy(p => p.NameSv).Select(p => new { p.Mssv, p.NameSv, p.IdLopNavigation.NameLop });
+            // ~ Sắp xếp với DESC
+            var selectAndOrder2 = db.Svs.OrderByDescending(p => p.NameSv).Select(p => p);
+            Console.WriteLine("--------------- Select All --------------");
+            foreach (var i in selectAll)
+            {
+                Console.WriteLine(i.Mssv + " " + i.NameSv);
+            }
+            foreach (var i in selectByCondition2)
+            {
+                Console.WriteLine(i.Mssv + " " + i.NameSv);
+            }
+            Console.WriteLine("--------------- OrderDefault --------------");
+            foreach (var i in selectOrderByDefaut)
+            {
+                Console.WriteLine(i.Mssv + " " + i.NameSv + " " + i.NameLop);
+            }
+            Console.WriteLine("--------------- Order by Function for name default ASC --------------");
+            foreach (var i in selectAndOrder1)
+            {
+                Console.WriteLine(i.Mssv + " " + i.NameSv + " " + i.NameLop);
+            }
+            Console.WriteLine("-------------- Order by Function for name Conditions DESC ---------------");
+            foreach (var i in selectAndOrder2)
+            {
+                Console.WriteLine(i.Mssv + " " + i.NameSv);
+            }
